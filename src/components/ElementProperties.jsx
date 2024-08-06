@@ -9,6 +9,11 @@ const ElementProperties = ({ element, updateElement }) => {
     updateElement(element.id, { [name]: value });
   };
 
+  const handleStyleChange = (e) => {
+    const { name, value } = e.target;
+    updateElement(element.id, { style: { ...element.style, [name]: value } });
+  };
+
   return (
     <div className="w-64 bg-gray-200 p-4">
       <h2 className="text-lg font-semibold mb-4">Properties</h2>
@@ -26,20 +31,32 @@ const ElementProperties = ({ element, updateElement }) => {
           <Label htmlFor="left">Left</Label>
           <Input
             id="left"
-            name="style.left"
+            name="left"
             value={element.style.left}
-            onChange={handleChange}
+            onChange={handleStyleChange}
           />
         </div>
         <div>
           <Label htmlFor="top">Top</Label>
           <Input
             id="top"
-            name="style.top"
+            name="top"
             value={element.style.top}
-            onChange={handleChange}
+            onChange={handleStyleChange}
           />
         </div>
+        {element.type === 'text' && (
+          <div>
+            <Label htmlFor="color">Color</Label>
+            <Input
+              id="color"
+              name="color"
+              type="color"
+              value={element.style.color}
+              onChange={handleStyleChange}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

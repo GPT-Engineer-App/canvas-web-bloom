@@ -1,13 +1,43 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import Canvas from '../components/Canvas';
+import Toolbar from '../components/Toolbar';
+import ElementProperties from '../components/ElementProperties';
 
 const Index = () => {
+  const [elements, setElements] = useState([]);
+  const [selectedElement, setSelectedElement] = useState(null);
+
+  const addElement = (type) => {
+    const newElement = {
+      id: Date.now(),
+      type,
+      content: type === 'text' ? 'New Text' : '',
+      style: { position: 'absolute', left: '10px', top: '10px' },
+    };
+    setElements([...elements, newElement]);
+  };
+
+  const updateElement = (id, updates) => {
+    setElements(elements.map(el => el.id === id ? { ...el, ...updates } : el));
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex h-screen bg-gray-100">
+        <Toolbar addElement={addElement} />
+        <Canvas 
+          elements={elements} 
+          updateElement={updateElement}
+          setSelectedElement={setSelectedElement}
+        />
+        <ElementProperties 
+          element={selectedElement} 
+          updateElement={updateElement}
+        />
       </div>
-    </div>
+    </DndProvider>
   );
 };
 
